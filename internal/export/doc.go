@@ -1,14 +1,11 @@
-// Package export provides writers that serialise drift scan results into
-// machine-readable formats suitable for downstream processing or archiving.
+// Package export provides writers that serialise a model.ScanResult into
+// various output formats.
 //
-// Currently supported formats:
+// Supported formats:
 //
-//   - CSV  — via CSVWriter, one row per resource with status and source columns.
+//	- CSV  via NewCSVWriter
+//	- JSON via NewJSONWriter
 //
-// Example usage:
-//
-//	w := export.NewCSVWriter(os.Stdout)
-//	if err := w.Write(scanResult); err != nil {
-//		log.Fatal(err)
-//	}
+// Each writer accepts an io.Writer so callers can target files, buffers, or
+// standard output without coupling to a specific destination.
 package export
