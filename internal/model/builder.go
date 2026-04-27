@@ -44,13 +44,20 @@ func FromAnalysis(a *analyser.Analysis) ScanResult {
 		result.DriftedResources = append(result.DriftedResources, drifted)
 	}
 
+	result.Summary = buildSummary(result)
+
+	return result
+}
+
+// buildSummary computes aggregate counts and coverage percentage from the
+// populated resource slices in result.
+func buildSummary(result ScanResult) Summary {
 	total := len(result.ManagedResources) + len(result.UnmanagedResources) + len(result.DeletedResources)
 	var coverage float64
 	if total > 0 {
 		coverage = float64(len(result.ManagedResources)) / float64(total) * 100
 	}
-
-	result.Summary = Summary{
+	return Summary{
 		TotalResources:  total,
 		Managed:         len(result.ManagedResources),
 		Unmanaged:       len(result.UnmanagedResources),
@@ -58,6 +65,4 @@ func FromAnalysis(a *analyser.Analysis) ScanResult {
 		Drifted:         len(result.DriftedResources),
 		CoveragePercent: coverage,
 	}
-
-	return result
 }
