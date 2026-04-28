@@ -24,6 +24,12 @@ type Result struct {
 	StillDrifted []model.Resource
 }
 
+// HasChanges reports whether the Result contains any notable changes,
+// i.e. newly drifted, resolved, or newly unmanaged resources.
+func (r Result) HasChanges() bool {
+	return len(r.NewlyDrifted) > 0 || len(r.Resolved) > 0 || len(r.NewlyUnmanaged) > 0
+}
+
 // Compare produces a diff.Result by comparing a baseline ScanResult to a current ScanResult.
 func Compare(baseline, current model.ScanResult) Result {
 	baselineDrifted := indexResources(baseline.DriftedResources)
