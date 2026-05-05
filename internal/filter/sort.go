@@ -12,7 +12,7 @@ type SortBy int
 const (
 	// SortByID sorts resources alphabetically by ID.
 	SortByID SortBy = iota
-	// SortByType sorts resources alphabetically by Type.
+	// SortByType sorts resources alphabetically by Type, with ID as a tiebreaker.
 	SortByType
 )
 
@@ -51,4 +51,16 @@ func UniqueTypes(resources []model.Resource) []string {
 	}
 	sort.Strings(types)
 	return types
+}
+
+// FilterByType returns a new slice containing only resources of the given type.
+// The original slice is not modified.
+func FilterByType(resources []model.Resource, resourceType string) []model.Resource {
+	result := make([]model.Resource, 0)
+	for _, r := range resources {
+		if r.Type == resourceType {
+			result = append(result, r)
+		}
+	}
+	return result
 }
